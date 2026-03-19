@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Mineral Collection</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0a0800;color:#f0e8d0;font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
+:root{--gold:#d4af37;--gold2:#c9a84c;--gold3:#e8c96a;--bg:#0a0800;--bg1:#0f0d00;--bg2:#161300;--bg3:#1e1a00;--line:rgba(212,175,55,0.15);--line2:rgba(212,175,55,0.07);--text:#f0e8d0;--muted:#8a7a50;--dim:#4a3f20;--red:#c0392b;--green:#2e7d52;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+/* HEADER */
+#header{background:linear-gradient(180deg,#0f0d00,#0a0800);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50;padding:0 24px;}
+#header-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;gap:16px;}
+.logo{font-size:22px;font-weight:600;letter-spacing:0.3em;text-transform:uppercase;background:linear-gradient(135deg,#d4af37,#e8c96a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.logo-sub{font-size:10px;color:var(--muted);letter-spacing:0.3em;font-family:'DM Mono',monospace;text-transform:uppercase;}
+.tabs{display:flex;}
+.tab{background:none;border:none;color:var(--muted);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;cursor:pointer;padding:10px 20px;border-bottom:1px solid transparent;transition:all 0.15s;text-transform:uppercase;}
+.tab.on{color:var(--gold);border-bottom-color:var(--gold);}
+.tel{font-size:11px;color:var(--muted);font-family:'DM Mono',monospace;flex-shrink:0;}
+.badge-cnt{background:linear-gradient(135deg,#d4af37,#e8c96a);color:#0a0800;border-radius:20px;padding:1px 7px;font-size:8px;margin-left:6px;font-family:'DM Mono',monospace;font-weight:600;}
+/* MAIN */
+#main{max-width:1280px;margin:0 auto;padding:32px 24px 100px;}
+/* HERO */
+#hero{text-align:center;margin-bottom:36px;padding:24px 0;border-bottom:1px solid var(--line2);}
+.hero-sub{font-size:9px;letter-spacing:0.5em;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:10px;}
+.hero-title{font-size:40px;font-weight:300;letter-spacing:0.12em;color:var(--text);margin-bottom:4px;line-height:1;}
+.hero-title span{background:linear-gradient(135deg,#d4af37,#e8c96a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600;}
+.hero-count{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.15em;margin-bottom:18px;}
+.badges{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;}
+.disc-badge{background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.2);border-radius:2px;padding:5px 14px;font-size:9px;color:var(--gold);font-family:'DM Mono',monospace;letter-spacing:0.15em;text-transform:uppercase;}
+.disc-badge.wheel{color:var(--gold3);}
+/* CONTROLS */
+#controls{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+input[type=text],select{background:#0f0d00;border:1px solid rgba(212,175,55,0.15);color:var(--text);font-family:'DM Mono',monospace;font-size:11px;border-radius:2px;padding:10px 14px;outline:none;transition:border-color 0.2s;}
+input[type=text]:focus,select:focus{border-color:var(--gold);}
+input[type=text]::placeholder{color:var(--dim);}
+#search{flex:1;min-width:200px;}
+.sort-btn,.lot-btn{background:none;border:1px solid rgba(212,175,55,0.15);color:var(--muted);font-family:'DM Mono',monospace;font-size:9px;padding:9px 12px;border-radius:2px;cursor:pointer;transition:all 0.15s;letter-spacing:0.1em;text-transform:uppercase;}
+.sort-btn.on{border-color:var(--gold);color:var(--gold);}
+.lot-btn{border-color:rgba(212,175,55,0.3);color:var(--gold);}
+.lot-btn.active{background:linear-gradient(135deg,#d4af37,#e8c96a);color:#0a0800;border:none;}
+/* LOT BAR */
+#lot-bar{background:rgba(212,175,55,0.1);border:1px solid rgba(212,175,55,0.3);border-radius:4px;padding:12px 18px;margin-bottom:14px;display:none;justify-content:space-between;align-items:center;}
+#lot-bar.show{display:flex;}
+.lot-info{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;color:var(--gold);text-transform:uppercase;}
+.lot-add-btn{background:linear-gradient(135deg,#d4af37,#e8c96a);color:#0a0800;border:none;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;padding:7px 16px;border-radius:2px;cursor:pointer;}
+/* COLLECTION FILTERS */
+#col-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px;}
+.fc{background:none;border:1px solid rgba(212,175,55,0.12);color:var(--muted);font-family:'DM Mono',monospace;font-size:9px;padding:4px 10px;border-radius:20px;cursor:pointer;transition:all 0.15s;white-space:nowrap;letter-spacing:0.1em;text-transform:uppercase;}
+.fc.on{border-color:var(--gold);color:var(--gold);background:rgba(212,175,55,0.08);}
+/* GRID */
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:12px;}
+.card{background:linear-gradient(145deg,#0f0d00,#161300);border:1px solid rgba(212,175,55,0.15);border-radius:4px;padding:16px;transition:all 0.2s;animation:fadeUp 0.3s ease both;position:relative;overflow:hidden;}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(212,175,55,0.5),transparent);opacity:0;transition:opacity 0.2s;}
+.card:hover{border-color:rgba(212,175,55,0.5);transform:translateY(-3px);box-shadow:0 8px 32px rgba(212,175,55,0.1);}
+.card:hover::before{opacity:1;}
+.card.lot-sel{border-color:var(--gold);background:linear-gradient(145deg,#1a1500,#201a00);}
+.card-col{font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;}
+.card-team{font-size:8px;color:var(--gold2);font-family:'DM Mono',monospace;opacity:0.7;}
+.card-header{display:flex;justify-content:space-between;margin-bottom:7px;}
+.card-name{font-size:17px;font-weight:600;color:var(--text);margin-bottom:3px;line-height:1.2;}
+.card-info{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:7px;}
+.card-var{display:inline-block;background:rgba(212,175,55,0.15);color:var(--gold);border:1px solid rgba(212,175,55,0.3);border-radius:2px;font-size:9px;padding:2px 8px;letter-spacing:0.15em;font-family:'DM Mono',monospace;text-transform:uppercase;margin-bottom:7px;}
+.card-price{font-size:20px;font-weight:600;background:linear-gradient(135deg,#d4af37,#e8c96a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.add-btn{background:linear-gradient(135deg,#b8922a,#d4af37,#b8922a);color:#0a0800;border:none;border-radius:2px;padding:8px 14px;font-family:'DM Mono',monospace;font-size:10px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;cursor:pointer;width:100%;margin-top:12px;transition:all 0.2s;}
+.add-btn:hover{background:linear-gradient(135deg,#c9a84c,#e8c96a);box-shadow:0 4px 16px rgba(212,175,55,0.3);}
+.add-btn.lot-mode{background:linear-gradient(135deg,#1e1a00,#2a2400);color:var(--gold);border:1px solid rgba(212,175,55,0.3);}
+.add-btn.lot-mode.sel{background:linear-gradient(135deg,#b8922a,#d4af37);color:#0a0800;border:none;}
+#no-results{grid-column:1/-1;text-align:center;padding:80px 0;color:var(--dim);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.4em;text-transform:uppercase;}
+/* CART */
+#cart-view{display:none;}
+#cart-view.show{display:block;}
+#shop-view{display:block;}
+#shop-view.hide{display:none;}
+.cart-title{font-size:28px;font-weight:500;margin-bottom:24px;letter-spacing:0.1em;}
+.cart-title span{background:linear-gradient(135deg,#d4af37,#e8c96a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+#cart-grid{display:grid;grid-template-columns:1fr 330px;gap:24px;align-items:start;}
+#cart-items{display:flex;flex-direction:column;gap:8px;}
+.cart-item{background:linear-gradient(145deg,#0f0d00,#161300);border:1px solid var(--line);border-radius:4px;padding:13px 16px;display:flex;align-items:center;gap:12px;}
+.cart-item-info{flex:1;}
+.cart-item-col{font-size:8px;color:var(--muted);letter-spacing:0.2em;text-transform:uppercase;font-family:'DM Mono',monospace;margin-bottom:2px;}
+.cart-item-name{font-size:16px;font-weight:600;}
+.cart-item-price{font-size:16px;font-weight:600;background:linear-gradient(135deg,#d4af37,#e8c96a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;}
+.rm-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:4px 8px;font-family:'DM Mono',monospace;transition:color 0.15s;}
+.rm-btn:hover{color:var(--red);}
+/* SUMMARY */
+#summary{background:linear-gradient(145deg,#0f0d00,#161300);border:1px solid var(--line);border-radius:4px;padding:20px;position:sticky;top:80px;}
+.sum-title{font-size:9px;letter-spacing:0.35em;text-transform:uppercase;color:var(--muted);font-family:'DM Mono',monospace;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line2);}
+.sum-row{display:flex;justify-content:space-between;margin-bottom:7px;font-size:13px;font-family:'DM Mono',monospace;}
+.sum-row.disc{color:var(--green);}
+.sum-row.bonus{color:var(--gold);}
+.sum-total{border-top:1px solid var(--line);padding-top:12px;margin-top:6px;display:flex;justify-content:space-between;margin-bottom:20px;}
+.sum-total-label{font-size:18px;font-weight:600;}
+.sum-total-val{font-size:22px;font-weight:600;background:linear-gradient(135deg,#d4af37,#e8c96a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+/* WHEEL */
+#wheel-section{text-align:center;margin-bottom:16px;padding:16px;background:rgba(212,175,55,0.05);border-radius:4px;border:1px solid rgba(212,175,55,0.2);}
+.wheel-title{font-size:8px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);font-family:'DM Mono',monospace;margin-bottom:12px;}
+#wheel-svg{transition:transform 3s cubic-bezier(0.17,0.67,0.12,0.99);filter:drop-shadow(0 0 12px rgba(212,175,55,0.4));display:block;margin:0 auto 12px;}
+.spin-btn{background:linear-gradient(135deg,#d4af37,#e8c96a);color:#0a0800;border:none;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:11px 20px;border-radius:2px;cursor:pointer;width:100%;}
+.spin-btn:disabled{opacity:0.6;cursor:wait;}
+#spin-result{text-align:center;margin-bottom:14px;padding:12px;background:rgba(212,175,55,0.08);border:1px solid rgba(212,175,55,0.25);border-radius:4px;display:none;}
+#spin-result.show{display:block;}
+.spin-result-label{font-size:20px;font-weight:600;color:var(--gold);}
+.spin-result-sub{font-size:9px;color:var(--muted);margin-top:3px;font-family:'DM Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;}
+/* CONTACT BTN */
+.contact-btn{background:linear-gradient(135deg,#25d366,#1da851);color:#fff;border:none;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;padding:13px 20px;border-radius:2px;cursor:pointer;width:100%;margin-bottom:8px;}
+.contact-sub{font-size:8px;color:var(--muted);text-align:center;letter-spacing:0.1em;font-family:'DM Mono',monospace;text-transform:uppercase;}
+/* EMPTY CART */
+#empty-cart{text-align:center;padding:80px 0;color:var(--dim);}
+.empty-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.4em;text-transform:uppercase;margin-bottom:16px;}
+.go-shop-btn{background:linear-gradient(135deg,#d4af37,#e8c96a);color:#0a0800;border:none;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;padding:12px 28px;border-radius:2px;cursor:pointer;}
+/* TOAST */
+#toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#1e1a00;border:1px solid var(--line);border-left:2px solid var(--gold);padding:11px 22px;font-size:11px;letter-spacing:0.08em;color:var(--text);border-radius:2px;z-index:1000;white-space:nowrap;font-family:'DM Mono',monospace;animation:toastIn 0.25s ease;display:none;}
+#toast.show{display:block;}
+::-webkit-scrollbar{width:3px;height:3px;}
+::-webkit-scrollbar-track{background:#0a0800;}
+::-webkit-scrollbar-thumb{background:#4a3f20;border-radius:2px;}
+@media(max-width:768px){#cart-grid{grid-template-columns:1fr;}#summary{position:static;}}
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div id="header-inner">
+    <div style="display:flex;align-items:baseline;gap:12px;flex-shrink:0;">
+      <span class="logo">Mineral</span>
+      <span class="logo-sub">Collection</span>
+    </div>
+    <div class="tabs">
+      <button class="tab on" onclick="showView('shop')">Catalogue</button>
+      <button class="tab" onclick="showView('cart')" id="cart-tab">Panier<span class="badge-cnt" id="cart-badge" style="display:none">0</span></button>
+    </div>
+    <div class="tel">📱 581-748-6316</div>
+  </div>
+</div>
+
+<div id="main">
+  <!-- SHOP -->
+  <div id="shop-view">
+    <div id="hero">
+      <div class="hero-sub">Collection privée · Québec</div>
+      <div class="hero-title">Cartes de <span>Hockey</span></div>
+      <div class="hero-count" id="hero-count">175 cartes disponibles</div>
+      <div class="badges">
+        <span class="disc-badge">100$+ → 10% rabais</span>
+        <span class="disc-badge">200$+ → 15% rabais</span>
+        <span class="disc-badge">400$+ → 20% rabais</span>
+        <span class="disc-badge wheel">🎰 Roue bonus si 100$+</span>
+      </div>
+    </div>
+
+    <div id="controls">
+      <input type="text" id="search" placeholder="Rechercher joueur, collection, équipe…" oninput="renderCards()"/>
+      <select id="eq-filter" onchange="renderCards()">
+        <option value="">Toutes les équipes</option>
+      </select>
+      <button class="sort-btn" id="sort-asc" onclick="setSort('asc')">↑ Prix</button>
+      <button class="sort-btn" id="sort-desc" onclick="setSort('desc')">↓ Prix</button>
+      <button class="lot-btn" id="lot-btn" onclick="toggleLotMode()">📦 Mode Lot</button>
+    </div>
+
+    <div id="lot-bar">
+      <span class="lot-info" id="lot-info">0 carte sélectionnée</span>
+      <button class="lot-add-btn" onclick="addLotToCart()">Ajouter le lot</button>
+    </div>
+
+    <div id="col-filters"></div>
+    <div id="grid"></div>
+  </div>
+
+  <!-- CART -->
+  <div id="cart-view">
+    <div class="cart-title">Votre <span>Panier</span></div>
+    <div id="empty-cart" style="display:none;">
+      <div class="empty-label">Panier vide</div>
+      <button class="go-shop-btn" onclick="showView('shop')">Voir le catalogue</button>
+    </div>
+    <div id="cart-grid">
+      <div id="cart-items"></div>
+      <div id="summary">
+        <div class="sum-title">Résumé</div>
+        <div class="sum-row"><span style="color:var(--muted)">Sous-total</span><span id="sum-sub">0,00 $</span></div>
+        <div class="sum-row disc" id="sum-disc-row" style="display:none"><span id="sum-disc-label">Rabais</span><span id="sum-disc-val"></span></div>
+        <div class="sum-row bonus" id="sum-bonus-row" style="display:none"><span id="sum-bonus-label">Bonus roue</span><span id="sum-bonus-val"></span></div>
+        <div class="sum-total"><span class="sum-total-label">Total</span><span class="sum-total-val" id="sum-total">0,00 $</span></div>
+        <div id="wheel-section" style="display:none;">
+          <div class="wheel-title">🎰 Bonus disponible!</div>
+          <div style="position:relative;width:180px;margin:0 auto 12px;">
+            <svg id="wheel-svg" width="180" height="180"></svg>
+            <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:18px;color:var(--gold);">▼</div>
+          </div>
+          <button class="spin-btn" id="spin-btn" onclick="doSpin()">Tourner la roue!</button>
+        </div>
+        <div id="spin-result">
+          <div class="spin-result-label" id="spin-result-label"></div>
+          <div class="spin-result-sub">Appliqué à votre commande</div>
+        </div>
+        <button class="contact-btn" onclick="contactWA()">📱 Contacter · 581-748-6316</button>
+        <div class="contact-sub">Votre sélection sera envoyée automatiquement</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const CARDS=[
+  {id:1,j:"Gabe Vilardi",a:"2021-22",c:"OPC Platinum",n:"#103",v:"",e:"Kings",p:3},
+  {id:2,j:"Victor Olofsson",a:"2021-22",c:"OPC Platinum",n:"#118",v:"",e:"Sabres",p:2},
+  {id:3,j:"Jordan Staal",a:"2021-22",c:"OPC Platinum",n:"#81",v:"",e:"Hurricanes",p:2},
+  {id:4,j:"Jonathan Marchessault",a:"2021-22",c:"OPC Platinum",n:"#185",v:"Rainbow",e:"Knights",p:15},
+  {id:5,j:"Josh Norris",a:"2021-22",c:"OPC Platinum",n:"#93",v:"",e:"Senators",p:3},
+  {id:6,j:"Ryan Strome",a:"2021-22",c:"OPC Platinum",n:"",v:"",e:"Rangers",p:2},
+  {id:7,j:"Jordan Kyrou",a:"2021-22",c:"OPC Platinum",n:"",v:"",e:"Blues",p:3},
+  {id:8,j:"Nino Niederreiter",a:"2021-22",c:"OPC Platinum",n:"",v:"",e:"Hurricanes",p:2},
+  {id:9,j:"Kevin Fiala",a:"2021-22",c:"OPC Platinum",n:"",v:"",e:"Wild",p:3},
+  {id:10,j:"Miro Heiskanen",a:"2021-22",c:"OPC Platinum",n:"",v:"",e:"Stars",p:5},
+  {id:11,j:"Tomas Hertl",a:"2021-22",c:"OPC Platinum",n:"",v:"",e:"Sharks",p:2},
+  {id:12,j:"Casey Mittelstadt",a:"2021-22",c:"OPC Platinum",n:"",v:"",e:"Sabres",p:2},
+  {id:13,j:"Colton Parayko",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Blues",p:3},
+  {id:14,j:"Gabe Vilardi",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Kings",p:3},
+  {id:15,j:"Kevin Fiala",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Kings",p:3},
+  {id:16,j:"Jack Hughes",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Devils",p:8},
+  {id:17,j:"Matt Boldy",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Wild",p:3},
+  {id:18,j:"Mason McTavish",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Ducks",p:4},
+  {id:19,j:"Erik Karlsson",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Penguins",p:3},
+  {id:20,j:"Rasmus Dahlin",a:"2023-24",c:"UD Trilogy",n:"#91",v:"",e:"Sabres",p:6},
+  {id:21,j:"Owen Power",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Sabres",p:4},
+  {id:22,j:"Noah Dobson",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Islanders",p:3},
+  {id:23,j:"Andrei Svechnikov",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Hurricanes",p:4},
+  {id:24,j:"Brad Marchand",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Bruins",p:4},
+  {id:25,j:"Jonathan Marchessault",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Knights",p:5},
+  {id:26,j:"Taylor Raddysh",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Blackhawks",p:2},
+  {id:27,j:"Andrei Vasilevskiy",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Lightning",p:5},
+  {id:28,j:"Ryan Nugent-Hopkins",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Oilers",p:3},
+  {id:29,j:"Rasmus Dahlin",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Sabres",p:6},
+  {id:30,j:"Nikita Kucherov",a:"2023-24",c:"UD Trilogy",n:"",v:"",e:"Lightning",p:8},
+  {id:31,j:"Jari Kurri",a:"2014-15",c:"Fleer Showcase",n:"#3",v:"",e:"Rangers",p:4},
+  {id:32,j:"Adam Henrique",a:"2014-15",c:"Fleer Showcase",n:"#4",v:"",e:"Devils",p:2},
+  {id:33,j:"Sean Couturier",a:"2014-15",c:"Fleer Showcase",n:"#5",v:"Team Canada",e:"Flyers",p:3},
+  {id:34,j:"Shea Weber",a:"2014-15",c:"Fleer Showcase",n:"#6",v:"",e:"Predators",p:3},
+  {id:35,j:"Max Pacioretty",a:"2014-15",c:"Fleer Showcase",n:"#10",v:"",e:"Canadiens",p:3},
+  {id:36,j:"Matt Duchene",a:"2014-15",c:"Fleer Showcase",n:"#14",v:"",e:"Avalanche",p:3},
+  {id:37,j:"Tuukka Rask",a:"2014-15",c:"Fleer Showcase",n:"#15",v:"",e:"Bruins",p:3},
+  {id:38,j:"Chris Osgood",a:"2014-15",c:"Fleer Showcase",n:"#18",v:"",e:"Red Wings",p:3},
+  {id:39,j:"Ryan Johansen",a:"2014-15",c:"Fleer Showcase",n:"#19",v:"Team Canada",e:"Predators",p:2},
+  {id:40,j:"Brendan Gallagher",a:"2014-15",c:"Fleer Showcase",n:"#20",v:"",e:"Canadiens",p:3},
+  {id:41,j:"Brett Hull",a:"2014-15",c:"Fleer Showcase",n:"#22",v:"",e:"Stars",p:6},
+  {id:42,j:"Steven Stamkos",a:"2014-15",c:"Fleer Showcase",n:
